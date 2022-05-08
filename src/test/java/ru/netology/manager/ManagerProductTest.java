@@ -1,9 +1,10 @@
 package ru.netology.manager;
 
 import org.junit.jupiter.api.Test;
-import ru.netology.Book;
-import ru.netology.Product;
-import ru.netology.Smartphone;
+import ru.netology.domain.Book;
+import ru.netology.domain.Product;
+import ru.netology.domain.Smartphone;
+import ru.netology.repository.NotFoundException;
 import ru.netology.repository.RepositoryProduct;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -128,6 +129,26 @@ class ManagerProductTest {
         Product[] actual = repository.findAll();
 
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void shouldRemoveProductByIdNotExisting() {
+        RepositoryProduct repository = new RepositoryProduct();
+
+        repository.saveProduct(bookOne);
+        repository.saveProduct(bookTwo);
+        repository.saveProduct(bookThree);
+        repository.saveProduct(bookFour);
+        repository.saveProduct(bookFive);
+        repository.saveProduct(smartphoneOne);
+        repository.saveProduct(smartphoneTwo);
+        repository.saveProduct(smartphoneThree);
+        repository.saveProduct(smartphoneFour);
+        repository.saveProduct(smartphoneFive);
+
+        assertThrows(NotFoundException.class, () -> {
+            repository.removeById(-3);
+        });
     }
 
     @Test

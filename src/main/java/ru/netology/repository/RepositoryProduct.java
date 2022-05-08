@@ -1,9 +1,8 @@
 package ru.netology.repository;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.netology.Product;
+import ru.netology.domain.Product;
 
 @NoArgsConstructor
 @Data
@@ -24,6 +23,9 @@ public class RepositoryProduct {
     }
 
     public void removeById(int id) {
+        if (findById(id) == null) {
+            throw new NotFoundException("Element with id: " + id + " not found");
+        }
         int length = products.length - 1;
         Product[] exist = new Product[length];
         int index = 0;
@@ -34,5 +36,14 @@ public class RepositoryProduct {
             }
             products = exist;
         }
+    }
+
+    public Product findById(int id) {
+        for (Product product : products) {
+            if (product.getId() == id) {
+                return product;
+            }
+        }
+        return null;
     }
 }
