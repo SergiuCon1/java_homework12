@@ -10,6 +10,11 @@ public class RepositoryProduct {
     Product[] products = new Product[0];
 
     public void saveProduct(Product product) {
+        for (Product product1 : products) {
+            if (product1.getId() == product.getId()) {
+                throw new AlreadyExistsException("Element with id: " + product.getId() + " already exist");
+            }
+        }
         int length = products.length + 1;
         Product[] tmp = new Product[length];
         System.arraycopy(products, 0, tmp, 0, products.length);

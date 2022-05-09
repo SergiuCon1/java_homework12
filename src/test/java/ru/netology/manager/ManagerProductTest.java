@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.domain.Book;
 import ru.netology.domain.Product;
 import ru.netology.domain.Smartphone;
+import ru.netology.repository.AlreadyExistsException;
 import ru.netology.repository.NotFoundException;
 import ru.netology.repository.RepositoryProduct;
 
@@ -21,6 +22,8 @@ class ManagerProductTest {
     Product smartphoneThree = new Smartphone(6, "Galaxy S22 Ultra", 10000, "Samsung");
     Product smartphoneFour = new Smartphone(8, "Google Pixel 6", 12000, "Google");
     Product smartphoneFive = new Smartphone(10, "OnePlus 10 Pro", 9000, "BBK Electronics");
+    Product smartphoneSix = new Smartphone(10, "OnePlus 10 Pro", 9000, "BBK Electronics");
+
 
 
     @Test
@@ -60,6 +63,18 @@ class ManagerProductTest {
         Product[] actual = manager.findAll();
 
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void shouldNotSaveProductWithTheSameId() {
+        ManagerProduct manager = new ManagerProduct();
+
+        manager.addProduct(bookOne);
+        manager.addProduct(smartphoneFive);
+
+        assertThrows(AlreadyExistsException.class, () -> {
+            manager.addProduct(smartphoneSix);
+        });
     }
 
     @Test
